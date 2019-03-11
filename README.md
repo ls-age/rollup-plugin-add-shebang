@@ -2,6 +2,7 @@
 
 > Rollup plugin that adds shebangs to output files
 
+[![CircleCI](https://circleci.com/gh/ls-age/rollup-plugin-add-shebang/tree/master.svg?style=svg)](https://circleci.com/gh/ls-age/rollup-plugin-add-shebang/tree/master)
 [![Greenkeeper badge](https://badges.greenkeeper.io/ls-age/rollup-plugin-add-shebang.svg)](https://greenkeeper.io/)
 
 ## Installation
