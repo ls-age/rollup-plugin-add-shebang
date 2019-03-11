@@ -1,0 +1,156 @@
+defaults: &defaults
+  docker:
+    - image: circleci/node:10
+
+git-login: &git-login
+  name: Setting up git user
+  command: git config --global user.email ci@ls-age.com && git config --global user.name "ls-age CI"
+
+npm-login: &npm-login
+  name: Logging in to npm
+  command: echo "$NPM_TOKEN" > ~/.npmrc
+
+version: 2
+jobs:
+  install-deps:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-npm-deps-{{ checksum "package-lock.json" }}
+      - run:
+          <<: *git-login
+      - run:
+          name: Installing npm dependencies
+          command: |
+            if [[ $CIRCLE_BRANCH = *"greenkeeper/"* ]]; then
+              echo "Running 'npm install'"
+
+              if git diff --exit-code package-lock.json; then
+                echo "package-lock did not change, continue..."
+              else
+                echo "Committing package-lock changes"
+                git add package-lock.json
+                git commit -m 'chore(package): Update lockfile';
+              fi
+            else
+              echo "Running 'npm ci'"
+              npm ci
+            fi
+      - run:
+          <<: *git-login
+      - save_cache:
+          key: v1-npm-deps-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  build:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Transpiling source code
+          command: npm run build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - out
+
+  lint-source:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Linting source files
+          command: npm run lint
+
+  type-check:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Checking typing
+          command: npm run type-check
+
+  test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Running tests
+          command: npm run test
+
+  update-lockfile:
+    <<: *defaults
+    steps:
+      - checkout
+      - add_ssh_keys
+      - attach_workspace:
+          at: .
+      - run:
+          <<: *git-login
+      - run:
+          name: Updating lockfile
+          command: git push origin $CIRCLE_BRANCH
+
+  deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - add_ssh_keys
+      - attach_workspace:
+          at: .
+      - run:
+          <<: *git-login
+      - run:
+          <<: *npm-login
+      - run:
+          name: Deploying changes
+          command:
+            npx @ls-age/bump-version release --gh-token $RELEASE_GITHUB_TOKEN
+
+workflows:
+  version: 2
+
+  test-and-deploy:
+    jobs:
+      - install-deps
+      - build:
+          requires:
+            - install-deps
+      - lint-source:
+          requires:
+            - install-deps
+      - type-check:
+          requires:
+            - install-deps
+      - test:
+          requires:
+            - build
+      - update-lockfile:
+          requires:
+            - lint-source
+            - type-check
+            - test
+          filters:
+            branches:
+              only: /greenkeeper\/.*/
+      - deploy:
+          requires:
+            - lint-source
+            - type-check
+            - test
+          filters:
+            branches:
+              only:
+                - master
+                - beta
