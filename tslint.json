@@ -1,0 +1,9 @@
+{
+  "extends": "tslint:recommended",
+  "rules": {
+    "quotemark": [true, "single"],
+    "max-line-length": [true, 100],
+    "interface-name": [true, "never-prefix"]
+  },
+  "jsRules": true
+}
