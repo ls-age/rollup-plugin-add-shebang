@@ -1,0 +1,35 @@
+{
+  "name": "rollup-plugin-add-shebang",
+  "version": "0.0.0",
+  "description": "Rollup plugin that adds shebangs to output files",
+  "main": "out/index.js",
+  "scripts": {
+    "build:js": "rollup -c",
+    "build:types": "tsc --emitDeclarationOnly",
+    "lint": "tslint -c tslint.json src/**/* rollup.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "rollup",
+    "plugin",
+    "add",
+    "shebang",
+    "cli"
+  ],
+  "author": "Lukas Hechenberger <npm@ls-age.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/preset-typescript": "^7.3.3",
+    "rollup": "^1.6.0",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-node-resolve": "^4.0.1",
+    "typescript": "^3.3.3333"
+  },
+  "dependencies": {
+    "magic-string": "^0.25.2",
+    "rollup-pluginutils": "^2.4.1"
+  }
+}
