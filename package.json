@@ -2,7 +2,20 @@
   "name": "rollup-plugin-add-shebang",
   "version": "0.0.0",
   "description": "Rollup plugin that adds shebangs to output files",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ls-age/rollup-plugin-add-shebang.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ls-age/rollup-plugin-add-shebang/issues"
+  },
+  "homepage": "https://github.com/ls-age/rollup-plugin-add-shebang#readme",
+  "author": "Lukas Hechenberger <npm@ls-age.com>",
   "main": "out/index.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
     "build:js": "rollup -c",
     "build:types": "tsc --emitDeclarationOnly",
@@ -17,8 +30,10 @@
     "shebang",
     "cli"
   ],
-  "author": "Lukas Hechenberger <npm@ls-age.com>",
-  "license": "MIT",
+  "dependencies": {
+    "magic-string": "^0.25.2",
+    "rollup-pluginutils": "^2.4.1"
+  },
   "devDependencies": {
     "@babel/core": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
@@ -30,18 +45,14 @@
     "rollup-plugin-node-resolve": "^4.0.1",
     "typescript": "^3.3.3333"
   },
-  "dependencies": {
-    "magic-string": "^0.25.2",
-    "rollup-pluginutils": "^2.4.1"
-  },
   "ava": {
-    "require": [
-      "./test/_register.js"
-    ],
     "babel": {
       "extensions": [
         "ts"
       ]
-    }
+    },
+    "require": [
+      "./test/_register.js"
+    ]
   }
 }
