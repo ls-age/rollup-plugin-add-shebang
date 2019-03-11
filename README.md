@@ -2,6 +2,8 @@
 
 > Rollup plugin that adds shebangs to output files
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/ls-age/rollup-plugin-add-shebang.svg)](https://greenkeeper.io/)
+
 ## Installation
 
 As usual, run `npm install --save-dev rollup-plugin-add-shebang`.
