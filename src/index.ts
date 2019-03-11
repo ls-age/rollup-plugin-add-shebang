@@ -1,3 +1,4 @@
+import { join, resolve } from 'path';
 import MagicString, { SourceMap } from 'magic-string';
 import { createFilter } from 'rollup-pluginutils';
 import rollup from 'rollup';
@@ -9,15 +10,19 @@ interface Options {
 }
 
 const plugin: rollup.PluginImpl<Options> = ({
-  include = ['cli.js', 'bin.js'],
+  include = ['**/cli.js', '**/bin.js'],
   exclude,
   shebang = '#!/usr/bin/env node',
 } : Options = {}) => {
   const filter = createFilter(include, exclude) as (fileName: string) => boolean;
 
   return { name: 'shebang',
-    renderChunk(code, { fileName }) {
-      if (!filter(fileName)) { return null; }
+    renderChunk(code, { fileName }, { dir, file }) {
+      const outPath = dir ?
+        join(dir, fileName) :
+        file || fileName;
+
+      if (!filter(resolve(outPath))) { return null; }
 
       const s = new MagicString(code);
 
