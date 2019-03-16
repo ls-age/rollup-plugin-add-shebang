@@ -1,7 +1,7 @@
 import test from 'ava';
 import { bundleSingle } from './_helpers';
 
-test('should add shebang to rendered chunk', async t => {
+test('should add shebang to rendered chunk', async (t) => {
   // create a bundle
   const bundle = await bundleSingle();
 

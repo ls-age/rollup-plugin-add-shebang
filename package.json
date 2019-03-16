@@ -21,7 +21,7 @@
     "build": "run-p build:*",
     "build:js": "rollup -c",
     "build:types": "tsc --emitDeclarationOnly",
-    "lint": "tslint -c tslint.json src/**/* rollup.config.js",
+    "lint": "tslint -c tslint.json src/**/*.ts ./test/{,**/}*.ts rollup.config.js",
     "test": "ava",
     "type-check": "tsc --noEmit"
   },
