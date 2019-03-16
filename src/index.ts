@@ -17,18 +17,22 @@ const plugin: rollup.PluginImpl<Options> = ({
   const filter = createFilter(include, exclude) as (fileName: string) => boolean;
 
   return { name: 'shebang',
-    renderChunk(code, { fileName }, { dir, file }) {
+    renderChunk(code, { fileName }, { dir, file, sourcemap }) {
       const outPath = dir ?
         join(dir, fileName) :
         file || fileName;
 
       if (!filter(resolve(outPath))) { return null; }
 
+      const prefix = `${shebang}
+
+`;
+
+      if (!sourcemap) { return `${prefix}${code}`; }
+
       const s = new MagicString(code);
 
-      s.prepend(`${shebang}
-
-`);
+      s.prepend(prefix);
 
       return {
         code: s.toString(),
