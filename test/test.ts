@@ -1,17 +1,9 @@
 import test from 'ava';
-import * as rollup from 'rollup';
-import shebang from '../src/index';
+import { bundleSingle } from './_helpers';
 
 test('should add shebang to rendered chunk', async t => {
   // create a bundle
-  const bundle = await rollup.rollup({
-    input: ['./test/fixtures/single.js'],
-    plugins: [
-      shebang({
-        include: 'single.js',
-      })
-    ]
-  });
+  const bundle = await bundleSingle();
 
   // generate code
   const { output: [output] } = await bundle.generate({
