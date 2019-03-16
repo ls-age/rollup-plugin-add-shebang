@@ -13,6 +13,7 @@
   "homepage": "https://github.com/ls-age/rollup-plugin-add-shebang#readme",
   "author": "Lukas Hechenberger <npm@ls-age.com>",
   "main": "out/index.js",
+  "types": "out/types/index.d.ts",
   "directories": {
     "test": "test"
   },
