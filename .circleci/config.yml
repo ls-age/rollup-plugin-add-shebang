@@ -26,6 +26,7 @@ jobs:
           command: |
             if [[ $CIRCLE_BRANCH = *"greenkeeper/"* ]]; then
               echo "Running 'npm install'"
+              npm install
 
               if git diff --exit-code package-lock.json; then
                 echo "package-lock did not change, continue..."
@@ -135,7 +136,7 @@ workflows:
             - install-deps
       - test:
           requires:
-            - build
+            - install-deps
       - update-lockfile:
           requires:
             - lint-source
