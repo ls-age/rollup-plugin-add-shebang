@@ -3,10 +3,12 @@ import { join, resolve } from 'path';
 import rollup from 'rollup';
 import { createFilter } from 'rollup-pluginutils';
 
+type GetShebang = () => string;
+
 interface Options {
   include?: string | string[];
   exclude?: string | string[];
-  shebang?: string;
+  shebang?: string | GetShebang;
 }
 
 const plugin: rollup.PluginImpl<Options> = ({
@@ -16,13 +18,18 @@ const plugin: rollup.PluginImpl<Options> = ({
 }: Options = {}) => {
   const filter = createFilter(include, exclude) as (fileName: string) => boolean;
 
-  return { name: 'shebang',
+  return {
+    name: 'shebang',
     renderChunk(code, { fileName }, { dir, file, sourcemap }) {
       const outPath = dir ?
         join(dir, fileName) :
         file || fileName;
 
       if (!filter(resolve(outPath))) { return null; }
+
+      if (typeof shebang === 'function') {
+        shebang = shebang() || '';
+      }
 
       const prefix = `${shebang}
 
