@@ -6,23 +6,26 @@ import { createFilter } from 'rollup-pluginutils';
 interface Options {
   include?: string | string[];
   exclude?: string | string[];
-  shebang?: string;
+  shebang?: string | (() => string);
 }
 
 const plugin: rollup.PluginImpl<Options> = ({
   include = ['**/cli.js', '**/bin.js'],
   exclude,
-  shebang = '#!/usr/bin/env node',
+  shebang: shebangOption = '#!/usr/bin/env node',
 }: Options = {}) => {
   const filter = createFilter(include, exclude) as (fileName: string) => boolean;
 
-  return { name: 'shebang',
+  return {
+    name: 'shebang',
     renderChunk(code, { fileName }, { dir, file, sourcemap }) {
       const outPath = dir ?
         join(dir, fileName) :
         file || fileName;
 
       if (!filter(resolve(outPath))) { return null; }
+
+      const shebang = typeof shebangOption === 'function' ? shebangOption() : shebangOption;
 
       const prefix = `${shebang}
 
