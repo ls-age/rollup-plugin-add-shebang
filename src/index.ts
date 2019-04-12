@@ -3,18 +3,16 @@ import { join, resolve } from 'path';
 import rollup from 'rollup';
 import { createFilter } from 'rollup-pluginutils';
 
-type GetShebang = () => string;
-
 interface Options {
   include?: string | string[];
   exclude?: string | string[];
-  shebang?: string | GetShebang;
+  shebang?: string | (() => string);
 }
 
 const plugin: rollup.PluginImpl<Options> = ({
   include = ['**/cli.js', '**/bin.js'],
   exclude,
-  shebang = '#!/usr/bin/env node',
+  shebang: shebangOption = '#!/usr/bin/env node',
 }: Options = {}) => {
   const filter = createFilter(include, exclude) as (fileName: string) => boolean;
 
@@ -27,9 +25,7 @@ const plugin: rollup.PluginImpl<Options> = ({
 
       if (!filter(resolve(outPath))) { return null; }
 
-      if (typeof shebang === 'function') {
-        shebang = shebang() || '';
-      }
+      const shebang = typeof shebangOption === 'function' ? shebangOption() : shebangOption;
 
       const prefix = `${shebang}
 
