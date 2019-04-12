@@ -58,5 +58,13 @@
     "require": [
       "./test/_register.js"
     ]
+  },
+  "renovate": {
+    "extends": [
+      "@ls-age"
+    ],
+    "devDependencies": {
+      "automerge": true
+    }
   }
 }

@@ -18,33 +18,18 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-npm-deps-{{ checksum "package-lock.json" }}
+            - v1-npm-cache-{{ checksum "package-lock.json" }}
       - run:
           <<: *git-login
       - run:
           name: Installing npm dependencies
-          command: |
-            if [[ $CIRCLE_BRANCH = *"greenkeeper/"* ]]; then
-              echo "Running 'npm install'"
-              npm install
-
-              if git diff --exit-code package-lock.json; then
-                echo "package-lock did not change, continue..."
-              else
-                echo "Committing package-lock changes"
-                git add package-lock.json
-                git commit -m 'chore(package): Update lockfile';
-              fi
-            else
-              echo "Running 'npm ci'"
-              npm ci
-            fi
+          command: npm ci
       - run:
           <<: *git-login
       - save_cache:
-          key: v1-npm-deps-{{ checksum "package-lock.json" }}
+          key: v1-npm-cache-{{ checksum "package-lock.json" }}
           paths:
-            - node_modules
+            - ~/.npm
       - persist_to_workspace:
           root: .
           paths:
@@ -90,19 +75,6 @@ jobs:
           name: Running tests
           command: npm run test
 
-  update-lockfile:
-    <<: *defaults
-    steps:
-      - checkout
-      - add_ssh_keys
-      - attach_workspace:
-          at: .
-      - run:
-          <<: *git-login
-      - run:
-          name: Updating lockfile
-          command: git push origin $CIRCLE_BRANCH
-
   deploy:
     <<: *defaults
     steps:
@@ -137,14 +109,6 @@ workflows:
       - test:
           requires:
             - install-deps
-      - update-lockfile:
-          requires:
-            - lint-source
-            - type-check
-            - test
-          filters:
-            branches:
-              only: /greenkeeper\/.*/
       - deploy:
           requires:
             - lint-source
