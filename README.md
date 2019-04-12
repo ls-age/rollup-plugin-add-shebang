@@ -24,7 +24,7 @@ export default {
       // A single or an array of filename patterns. Defaults to ['**/cli.js', '**/bin.js'].
       include: 'out/cli.js'
       // you could also 'exclude' here
-      // or specify a special shebang using the 'shebang' option
+      // or specify a special shebang (or a function returning one) using the 'shebang' option
     }),
   ],
   ...
