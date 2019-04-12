@@ -1,3 +1,14 @@
+<a name="0.2.0"></a>
+# 0.2.0 (2019-04-12)
+
+
+### Features
+
+* Allow shebang option to be a function ([#14](https://github.com/ls-age/rollup-plugin-add-shebang/issues/14)) ([d699db8](https://github.com/ls-age/rollup-plugin-add-shebang/commits/d699db8))
+
+
+
+
 <a name="0.1.1"></a>
 ## 0.1.1 (2019-03-16)
 
