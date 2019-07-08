@@ -61,10 +61,7 @@
   },
   "renovate": {
     "extends": [
-      "@ls-age"
-    ],
-    "devDependencies": {
-      "automerge": true
-    }
+      "@ls-age:automergeDev"
+    ]
   }
 }
