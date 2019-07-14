@@ -12,7 +12,7 @@ interface Options {
 const plugin: rollup.PluginImpl<Options> = ({
   include = ['**/cli.js', '**/bin.js'],
   exclude,
-  shebang: shebangOption = '#!/usr/bin/env node',
+  shebang: shebangOption,
 }: Options = {}) => {
   const filter = createFilter(include, exclude) as (fileName: string) => boolean;
 
@@ -25,7 +25,8 @@ const plugin: rollup.PluginImpl<Options> = ({
 
       if (!filter(resolve(outPath))) { return null; }
 
-      const shebang = typeof shebangOption === 'function' ? shebangOption() : shebangOption;
+      const shebang = (typeof shebangOption === 'function' ? shebangOption() : shebangOption)
+        || '#!/usr/bin/env node';
 
       const prefix = `${shebang}
 

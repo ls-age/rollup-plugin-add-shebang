@@ -30,3 +30,21 @@ test('should add shebang to rendered chunk, using a function', async (t) => {
   t.is(output.fileName, 'single.js');
   t.true(output.code.startsWith('#!/usr/bin/env ts-node'));
 });
+
+test('should add default shebang if not returned by function', async (t) => {
+
+  // create a bundle
+  const bundle = await bundleSingle({
+    // tslint:disable-next-line: no-empty
+    shebang() { },
+  });
+
+  // generate code
+  const { output: [output] } = await bundle.generate({
+    format: 'cjs',
+  });
+
+  t.is(output.fileName, 'single.js');
+  t.true(output.code.startsWith('#!/usr/bin/env node'));
+
+});
