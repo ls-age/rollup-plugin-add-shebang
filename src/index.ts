@@ -1,4 +1,4 @@
-import MagicString, { SourceMap } from 'magic-string';
+import MagicString from 'magic-string';
 import { join, resolve } from 'path';
 import rollup from 'rollup';
 import { createFilter } from 'rollup-pluginutils';
@@ -43,7 +43,7 @@ const plugin: rollup.PluginImpl<Options> = ({
         // Need to cast version, as it's declared string
         // See: https://github.com/Rich-Harris/magic-string/pull/155
         // (already merged, will be in next release)
-        map: s.generateMap({ hires: true }) as SourceMap & { version: number },
+        map: s.generateMap({ hires: true }),
       };
     },
   };
