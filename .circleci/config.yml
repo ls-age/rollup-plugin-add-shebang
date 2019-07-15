@@ -111,6 +111,7 @@ workflows:
             - install-deps
       - deploy:
           requires:
+            - build
             - lint-source
             - type-check
             - test
