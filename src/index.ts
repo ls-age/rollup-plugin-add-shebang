@@ -27,6 +27,10 @@ const plugin: rollup.PluginImpl<Options> = ({
 
       const shebang = typeof shebangOption === 'function' ? shebangOption() : shebangOption;
 
+      if (!shebang) {
+        throw new Error('Invalid `shebang` option: Should be a string or a function returning one');
+      }
+
       const prefix = `${shebang}
 
 `;
