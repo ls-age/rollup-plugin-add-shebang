@@ -37,8 +37,8 @@
     "rollup-pluginutils": "^2.8.1"
   },
   "devDependencies": {
-    "@babel/core": "7.6.2",
-    "@babel/preset-env": "7.6.2",
+    "@babel/core": "7.6.3",
+    "@babel/preset-env": "7.6.3",
     "@babel/preset-typescript": "7.6.0",
     "@babel/register": "7.6.2",
     "ava": "2.4.0",
