@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.8.0",
-    "@babel/preset-env": "7.8.0",
+    "@babel/preset-env": "7.8.2",
     "@babel/preset-typescript": "7.8.0",
     "@babel/register": "7.8.0",
     "ava": "2.4.0",
